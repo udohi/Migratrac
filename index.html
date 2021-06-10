@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>MigraTrac</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD-zHtrTx-t822F-cNhIabOvCnYi7NONZY&libraries=geometry"></script>
+	<script type="text/javascript" src="js/map.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+        <script src="js/firebase-database.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default banner" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="img/logo.png" class="img-responsive" />
+                <h3>Migratrac</h3>
+            </div>
+            <div class="collapse navbar-collapse " id="main-nav">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a>Home</a></li>
+                    <li><a href="demo.html">Demo</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+			<div class="col-sm-12">
+				<h3 class="rounded-heading">Project Description</h3>
+				<p>
+                                    <strong>Why Migratrac?</strong> 
+                                    There is little, known about the routes of migratory birds such as nightingales and flycatchers. 
+                                    There remains a paucity of information about   these bird's rest stops and final destination. 
+                                    Without knowing exactly their migratory itinerary, we cannot understand how to conserve them. 
+                                    Understanding the routes these birds take can help us preserve them by providing shelter during migration. 
+                                    Providing refuge for migratory birds by preserving existing forest and the restoration of former forests along
+                                    their route can considerably reduce the population declines of these birds. The number of birds that can 
+                                    be saved by the forest when adverse weather conditions coincide with migration will be highly remarkable. 
+                                    It is believed that an IoT system that acoustically monitors the night-flight calls of migrating birds offers enormous 
+                                    potential for improving understanding of migration routes, migration timing, and species composition at specific locations.
+                                    <strong>What is Migratrac?</strong> 
+                                    Migratrac is an  IoT system that detects and records the night-flight calls of birds,sends the detected flight call 
+                                    wirelessly to a cloud service platform for sound analysis using a trained machine learning model. With the model's machine 
+                                    learning algorithm and a data set of known bird's flight call, the specific bird specie making the migration 
+                                    is determined. Also, by interpreting the bird's call sequences, the minimum number of birds migrating at that period is 
+                                    approximated. An interface is used to display this information along with the presumable migration routes and timings. 
+                                </p>
+                                <a class="btn" href="demo.html">See Migratrac in Action  </a>
+			</div>
+            </div> 
+            <div class="row footer" id="about">
+                <div class="col-md-12">&copy; 2017 <a href="admin/index.html">MigraTrac</a>.Powered by Itoro Udoh.</div>
+            </div>
+        </div>
+    </body>
+</html>

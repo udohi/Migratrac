@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MigraTrac Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/admin.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-zHtrTx-t822F-cNhIabOvCnYi7NONZY&libraries=places"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <script src="../js/firebase-database.js"></script>
+</head>
+
+<body ng-app="migratrac" ng-controller="birdsCtrl">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Migratrac</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Birds</a></li>
+                        <li><a href="../demo.html">Front End</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="javascript:;" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </nav>
+    <div class="container">
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>All Birds</h1>
+                <p class="text-right">
+                    <button class="btn btn-primary" ng-click="showBirdModal()">Add a bird</button>
+                </p>
+                <table class="table table-bordered table-birds">
+                    <tr>
+                        <th width="10%">Name</th>
+                        <th width="20%">Image</th>
+                        <th width="55%">Description</th>
+                        <th width="15%" class="text-center">Edit</th>
+                    </tr>
+                    <tr ng-repeat="(id, bird) in birds">
+                        <td>{{bird.name}}</td>
+                        <td><img ng-src="{{bird.img}}" width="200"></td>
+                        <td>{{bird.description | limitTo: 200}} <span ng-if="bird.description.length > 200">...</span></td>
+                        <td class="text-center">
+                            <p><a href="javascript:;" ng-click="showBirdModal()" class="btn btn-default btn-edit"><i class="glyphicon glyphicon-pencil"></i> Information</a></p>
+                            <p><a href="javascript:;" ng-click="showPathModal()" class="btn btn-default btn-edit"><i class="glyphicon glyphicon-pencil"></i> Migration</a></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" ng-if="!birds" class="text-center">
+                            <img src="../img/loading.gif" width="50">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="birdModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add/Edit Bird</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="selectedBird.name">
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="text" class="form-control" ng-model="selectedBird.img">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="4" ng-model="selectedBird.description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="saveBird()">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="pathModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit the migration path</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <select class="form-control" ng-model="year" ng-options="year for year in years"></select>
+                    </div>
+                    <div class="row" ng-repeat="month in months">
+                        <div class="col-sm-1">
+                            <label>{{monthLabels[month]}}</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <input type="text" ng-model="selectedBird.migraPaths[year][month].location" class="form-control location" placeholder="Location">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" ng-model="selectedBird.migraPaths[year][month].lat" class="form-control lat" placeholder="Latitude">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" ng-model="selectedBird.migraPaths[year][month].lng" class="form-control lng" placeholder="Longitude">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="saveBird()">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    //Check authentication
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+            location.href = 'login.html';
+        }
+    });
+
+
+    var app = angular.module("migratrac", []);
+    app.controller("birdsCtrl", function($scope) {
+        $scope.years = [2017, 2018, 2019];
+        $scope.year = 2017;
+        $scope.months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        $scope.monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $scope.birds = null;
+
+        database.ref('birds').once('value').then(function(snapshot) {
+            $scope.$apply(function() {
+                $scope.birds = snapshot.val();
+            });
+        });
+
+        $scope.showBirdModal = function() {
+            $scope.selectedId = this.id;
+            $scope.selectedBird = this.bird;
+            $('#birdModal').modal('show');
+        }
+
+        $scope.showPathModal = function() {
+            $scope.selectedId = this.id;
+            $scope.selectedBird = this.bird;
+            $('#pathModal').modal('show');
+        }
+
+        $scope.saveBird = function() {
+            var update = {};
+            if (!$scope.selectedId) {
+                $scope.selectedId = database.ref('birds').push().key;
+                $scope.birds[$scope.selectedId] = $scope.selectedBird;
+                $scope.selectedBird.created = (new Date()).getTime();
+            }
+            $scope.selectedBird.updated = (new Date()).getTime();
+            update[$scope.selectedId] = $scope.selectedBird;
+            database.ref('birds').update(update);
+            $('#birdModal').modal('hide');
+            $('#pathModal').modal('hide');
+        }
+
+        $scope.logout = function(){
+            firebase.auth().signOut();
+        }
+
+        angular.element(document).ready(function() {
+
+            $('input.location').each(function() {
+                var input = this;
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+                    if (place.geometry) {
+                        $(input).trigger('change');
+                        var row = $(input).closest('.row');
+                        row.find('input.lat').val(place.geometry.location.lat()).trigger('change');
+                        row.find('input.lng').val(place.geometry.location.lng()).trigger('change');
+                    }
+                });
+            })
+        });
+    });
+    </script>
+</body>
+
+</html>

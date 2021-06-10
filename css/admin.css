@@ -1,0 +1,12 @@
+.pac-container{
+    z-index: 1051;
+}
+.table-birds .btn-edit{
+    width: 115px;
+}
+.login-form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	border-radius: 10px;
+	margin-top: 50px;
+}
